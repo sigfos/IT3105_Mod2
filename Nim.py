@@ -17,9 +17,7 @@ class Nim:
         if self.check_finished():
             if self.player == 2:
                 return 0
-
-            elif self.player == 1:
-                return 1
+            return 1
     """
     def move(self, n):
         if n < self.K and n < self.N:
@@ -39,28 +37,27 @@ class Nim:
     def change_player(self):
         if self.player == 1:
             return 2
-        else:
-            return 1
+        return 1
 
     def generate_children(self):
-        # make new state for every possible move
-        # change player
-        # change N
-        # return list with all children states
         states = []
         for i in range (self.K):
-            states.append(Nim(self.N-(i+1)))
-            states[i].player = self.change_player()
+            if (self.N-(i+1)) >= 0:
+                states.append(Nim(self.N-(i+1)))
+                states[i].player = self.change_player()
         return states
 
 
 def main():
-    game = Nim(5, 3)
+    game = Nim(15, 3)
     mcts = MCTS(game)
-    optimal_path = mcts.run(100)
-
+    optimal_path = mcts.run(200)
     for node in optimal_path:
-        print(node)
+        print("N = ", node.state.N)
+    print ("Player", optimal_path[-2].state.player, "wins!")
+
+
+main()
 
 # Spill mot menneske
 # Spill mot random bot
